@@ -3,3 +3,9 @@ extends layout
 block content
   h1= title
   p Welcome to #{title}
+  div
+    input(type="radio", name="mood", id="happy")
+    label(for="happy") Happy
+  div
+    input(type="radio", name="mood", id="sad")
+    label(for="sad") Sad
