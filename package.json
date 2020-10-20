@@ -14,5 +14,8 @@
     "open": "^7.3.0",
     "querystring": "^0.2.0",
     "spotify-web-api-node": "^5.0.0"
+  },
+  "devDependencies": {
+    "eslint-plugin-node": "^11.1.0"
   }
 }
