@@ -4,7 +4,9 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const queryString = require('querystring');
-const dotenv = require('dotenv').config();
+const dotenv = require('dotenv');
+const SpotifyWebApi = require('spotify-web-api-node');
+const spotifyAPI = require('./helpers/spotifyAPI');
 
 const indexRouter = require('./routes/index');
 
