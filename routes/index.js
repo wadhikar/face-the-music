@@ -5,6 +5,7 @@ const router = express.Router();
 /* GET home page. */
 router.get('/', function(req, res, next) {
   
+  // TODO #6 If access_token is expired, only then get and set new access_token
   // Upon loading homepage, get and set access token for all future requests
   spotifyAPI.clientCredentialsGrant().then(
     function(data) {
