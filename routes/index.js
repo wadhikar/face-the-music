@@ -10,17 +10,17 @@ router.get('/', function(req, res, next) {
     function(data) {
       
       // Basic debugging
-      console.log('The access token expires in ' + data.body['expires_in']);
-      console.log('The access token is ' + data.body['access_token']);
+      // console.log('The access token expires in ' + data.body['expires_in']);
+      // console.log('The access token is ' + data.body['access_token']);
 
       // Set access token for use in future calls
       spotifyAPI.setAccessToken(data.body['access_token']);
     },
     function(err) {
-      console.log(
-        'Something went wrong when retrieving an access token',
-        err.message
-      )
+      // console.log(
+      //   'Something went wrong when retrieving an access token',
+      //   err.message
+      // )
     }
   )
   res.render('index', { title: 'Express' });
