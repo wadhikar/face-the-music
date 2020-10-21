@@ -1,4 +1,5 @@
 const dotenv = require('dotenv');
+const SpotifyWebApi = require('spotify-web-api-node');
 
 dotenv.config();
 
