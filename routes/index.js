@@ -9,9 +9,7 @@ router.get('/', function(req, res, next) {
   
   // TODO #6 If access_token is expired, only then get and set new access_token
   // Upon loading homepage, get and set access token for all future requests
-  spotifyAPI._c
-
-  spotifyAPI.clientCredentialsGrant().then(
+    spotifyAPI.clientCredentialsGrant().then(
     function(data) {
       console.log("Received token!");
       
@@ -26,7 +24,7 @@ router.get('/', function(req, res, next) {
       next(err);
     }
   )
-  res.render('index', { title: 'Express' });
+  res.render('index', { title: 'Face the Music' });
 });
 
 router.post('/', function(req, res, next) {
@@ -75,9 +73,7 @@ router.post('/', function(req, res, next) {
     })
   );
 
-  // res.end(res.render('index', { title: 'Express' }));
-
-  res.redirect(200, 'index');
+  res.render('index', { title: 'Face the Music' });
 
 });
 
