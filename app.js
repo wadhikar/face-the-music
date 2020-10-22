@@ -7,6 +7,7 @@ const queryString = require('querystring');
 const dotenv = require('dotenv');
 const SpotifyWebApi = require('spotify-web-api-node');
 const spotifyAPI = require('./helpers/spotifyAPI');
+const ignoreFavicon = require('./middlewares/ignore-favicon');
 
 const indexRouter = require('./routes/index');
 
@@ -21,6 +22,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(ignoreFavicon);
 
 app.use('/', indexRouter);
 
