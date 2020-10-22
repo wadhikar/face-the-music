@@ -31,6 +31,7 @@ Currently finding suitable playlists with predefined keywords.
 
   ```bash
   $ yarn start
+  Server running at http://localhost:3000
   ```
 
 ## Licensing
