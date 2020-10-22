@@ -6,8 +6,10 @@ const logger = require('morgan');
 const queryString = require('querystring');
 const dotenv = require('dotenv');
 const SpotifyWebApi = require('spotify-web-api-node');
-const spotifyAPI = require('./helpers/spotifyAPI');
+
+const spotifyAPI = require('./helpers/spotify-api');
 const ignoreFavicon = require('./middlewares/ignore-favicon');
+const spotifyTrim = require('./helpers/spotify-trim')
 
 const indexRouter = require('./routes/index');
 
