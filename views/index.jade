@@ -3,9 +3,12 @@ extends layout
 block content
   h1= title
   p Welcome to #{title}
-  div
-    input(type="radio", name="mood", id="happy")
-    label(for="happy") Happy
-  div
-    input(type="radio", name="mood", id="sad")
-    label(for="sad") Sad
+  form(action="/", method="post", name="mood")
+    div
+      input(type="radio", id="happy")
+      label(for="happy") Happy
+    div
+      input(type="radio", id="sad")
+      label(for="sad") Sad
+    div
+      input(type="submit", value="Find a playlist!")
