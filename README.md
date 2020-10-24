@@ -27,6 +27,16 @@ Currently finding suitable playlists with predefined keywords.
   $ yarn install
   ```
   
+## Configuration
+
+Create a .env file for the Spotify API credentials for testing on your local. They can be created/retrieved from the [Spotify Developer Dashboard](https://developer.spotify.com/dashboard/). 
+
+The format that this app looks for is:
+  ```
+  CLIENT_ID=<Your client id>
+  CLIENT_SECRET=<Your client secret>
+  ```
+  
 ## Usage
 
   ```bash
