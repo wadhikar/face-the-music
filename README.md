@@ -29,7 +29,7 @@ Currently finding suitable playlists with predefined keywords.
   
 ## Configuration
 
-Create a .env file for the Spotify API credentials for testing on your local. They can be created/retrieved from the [Spotify Developer Dashboard](https://developer.spotify.com/dashboard/). 
+Create a .env file in the project root directory for the Spotify API credentials for testing on your local. They can be created/retrieved from the [Spotify Developer Dashboard](https://developer.spotify.com/dashboard/). 
 
 The format that this app looks for is:
   ```
