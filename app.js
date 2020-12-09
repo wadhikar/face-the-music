@@ -6,6 +6,7 @@ const logger = require('morgan');
 const queryString = require('querystring');
 const dotenv = require('dotenv');
 const SpotifyWebApi = require('spotify-web-api-node');
+const multer = require('multer');
 
 const spotifyAPI = require('./helpers/spotify-api');
 const ignoreFavicon = require('./middlewares/ignore-favicon');
@@ -18,6 +19,9 @@ const app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
+
+// multer options
+const upload = multer();
 
 app.use(ignoreFavicon);
 
