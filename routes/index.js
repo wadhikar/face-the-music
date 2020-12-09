@@ -27,7 +27,7 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Face the Music' });
 });
 
-router.post('/', function(req, res, next) {
+router.post('/playlist', function(req, res, next) {
 
   const emotion =  req.body.mood;
   let results = [];
@@ -73,8 +73,7 @@ router.post('/', function(req, res, next) {
     })
   );
 
-  res.render('index', { title: 'Face the Music' });
-
+  res.redirect('/')
 });
 
 module.exports = router;
