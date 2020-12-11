@@ -2,7 +2,12 @@ const express = require('express');
 const open = require('open');
 const spotifyAPI = require('../helpers/spotify-api');
 const spotifyTrim = require('../helpers/spotify-trim');
+const multer = require('multer');
+
 const router = express.Router();
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 /* GET home page. */
 router.get('/', function(req, res, next) {

@@ -7,6 +7,7 @@ const queryString = require('querystring');
 const dotenv = require('dotenv');
 const SpotifyWebApi = require('spotify-web-api-node');
 const multer = require('multer');
+const axios = require('axios');
 
 const spotifyAPI = require('./helpers/spotify-api');
 const ignoreFavicon = require('./middlewares/ignore-favicon');
