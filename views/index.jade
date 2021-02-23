@@ -26,6 +26,7 @@ block content
   br
   form(action="/upload", method="post", enctype="multipart/form-data")
     div
-      label(for="upload") Upload a Selfie.
+      label(for="selfie") Upload a Selfie.
       br
-      input(type="file", name="selfie", accept="image/*", capture="user", id="upload")
+      input(type="file", name="selfie", accept="image/*", capture="user", id="selfie")
+      input(type="submit", value="Upload")

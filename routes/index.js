@@ -1,8 +1,12 @@
 const express = require('express');
 const open = require('open');
+const multer = require('multer');
+
 const spotifyAPI = require('../helpers/spotify-api');
 const spotifyTrim = require('../helpers/spotify-trim');
-const multer = require('multer');
+const {
+  createImageURL, faceClient, faceDetectFromStreamOptionalParams, getHighestEmotion
+} = require('../helpers/azure-face-scan');
 
 const router = express.Router();
 
@@ -32,6 +36,7 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Face the Music' });
 });
 
+/* POST for Spotify request and open a playlist. */
 router.post('/playlist', function(req, res, next) {
 
   const emotion =  req.body.mood;
@@ -44,7 +49,7 @@ router.post('/playlist', function(req, res, next) {
   })
   .then(function(data) {
     console.log("Received results!");
-    let emotionPlaylists = spotifyTrim.getEmotionPlaylists(emotion, data.body)
+    let emotionPlaylists = spotifyTrim.getPlaylistsFromUserEmotion(emotion, data.body)
     results.push(emotionPlaylists);
     
   }, function(err) {
@@ -59,7 +64,7 @@ router.post('/playlist', function(req, res, next) {
     })
     .then(function(data) {
       console.log("Received results!");
-      let emotionPlaylists = spotifyTrim.getEmotionPlaylists(emotion, data.body)
+      let emotionPlaylists = spotifyTrim.getPlaylistsFromUserEmotion(emotion, data.body)
       results.push(emotionPlaylists);
 
       // Ensure our array is flat
@@ -79,6 +84,85 @@ router.post('/playlist', function(req, res, next) {
   );
 
   res.redirect('/')
+});
+
+/* 
+POST image for scanning with Azure Face API. 
+Use the returned emotions to find a corresponding playlist
+Use cloudinary to upload selfie to get URL to image.
+Use said URL to send to Face API.
+*/
+router.post('/upload', upload.single('selfie'), function(req, res, next) {
+  
+  // Need to figure out how to read buffer
+  const image = req.file.buffer;
+  let emotion = '';
+  let results = [];
+
+  console.log("Image Buffer: ", image);
+
+  (async () => {
+    await faceClient.face
+      .detectWithStream(image, faceDetectFromStreamOptionalParams)
+      .then(result => {
+        console.log("The result is: ");
+        console.log(result);
+        console.log("The emotions are: ");
+        console.log(result[0].faceAttributes.emotion);
+        emotion = getHighestEmotion(result[0].faceAttributes.emotion);
+        console.log("The strongest emotion is: ", emotion);
+        next();
+      });
+    
+    // Currently stops here, probably because tries to execute but emotion value isn't set in promise
+    // Might also have issues with multiple requests happening since SpotifyAPI probably does so under the hood
+    console.log("Getting playlist after Face API: ", emotion);
+    
+    await spotifyAPI.getPlaylistsForCategory('mood', {
+      country: 'CA',
+      limit : 50,
+      offset : 0
+    })
+    .then(function(data) {
+      console.log("Received results!");
+      let emotionPlaylists = spotifyTrim.getPlaylistsFromFaceEmotion(emotion, data.body)
+      results.push(emotionPlaylists);
+      
+    }, function(err) {
+      console.log("Something went wrong!", err);
+      next(err);
+    })
+    .then(
+      spotifyAPI.getPlaylistsForCategory('mood', {
+        country: 'CA',
+        limit : 50,
+        offset : 50
+      })
+      .then(function(data) {
+        console.log("Received results!");
+        let emotionPlaylists = spotifyTrim.getPlaylistsFromFaceEmotion(emotion, data.body)
+        results.push(emotionPlaylists);
+
+        // Ensure our array is flat
+        results = results.flat();
+
+        let playlistId = spotifyTrim.getRandomPlaylistId(results);
+        let spotifyExternalURL = spotifyTrim.buildOpenSpotifyURL(playlistId);
+        
+        (async () => {
+          await open(spotifyExternalURL);
+        })();
+        
+      }, function(err) {
+        console.log("Something went wrong!", err);
+        next(err);
+      })
+    )
+    }
+  )();
+  
+  res.redirect('/')
+
 });
 
 module.exports = router;

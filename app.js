@@ -9,7 +9,10 @@ const SpotifyWebApi = require('spotify-web-api-node');
 const multer = require('multer');
 const axios = require('axios');
 
-const spotifyAPI = require('./helpers/spotify-api');
+const { FaceClient, FaceModels } = require("@azure/cognitiveservices-face");
+const { CognitiveServicesCredentials } = require("@azure/ms-rest-azure-js");
+
+const spotifyAPIConfig = require('./helpers/spotify-api');
 const ignoreFavicon = require('./middlewares/ignore-favicon');
 const spotifyTrim = require('./helpers/spotify-trim')
 
@@ -17,12 +20,13 @@ const indexRouter = require('./routes/index');
 
 const app = express();
 
+// multer options
+// const storage = multer.memoryStorage();
+// const upload = multer({ storage: storage });
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
-
-// multer options
-const upload = multer();
 
 app.use(ignoreFavicon);
 
