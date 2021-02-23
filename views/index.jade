@@ -2,8 +2,8 @@ extends layout
 
 block content
   h1= title
-  p Welcome to #{title}
-  form(action="/", method="post")
+  p Welcome to #{title}.
+  form(action="/playlist", method="post")
     div
       input(type="radio", id="happy", value="Happy", name="mood")
       label(for="happy") Happy
@@ -21,3 +21,12 @@ block content
       label(for="motivated") Motivated
     div
       input(type="submit", value="Find a playlist!")
+  
+  div
+  br
+  form(action="/upload", method="post", enctype="multipart/form-data")
+    div
+      label(for="selfie") Upload a Selfie.
+      br
+      input(type="file", name="selfie", accept="image/*", capture="user", id="selfie")
+      input(type="submit", value="Upload")

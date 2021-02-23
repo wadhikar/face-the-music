@@ -4,7 +4,7 @@ const angry = ['loud', 'dramatic', 'pounding'];
 const relaxed = ['soft', 'smooth', 'relax', 'chill', 'cozy', 'relaxing', 'piano'];
 const motivated = ['top', 'work', 'free', 'bangers'];
 
-module.exports.getEmotionPlaylists = function(emotion, spotifyJSONResponse) {
+module.exports.getPlaylistsFromUserEmotion = function(emotion, spotifyJSONResponse) {
 
     let playlists = [];
     if (spotifyJSONResponse) {
@@ -30,6 +30,46 @@ module.exports.getEmotionPlaylists = function(emotion, spotifyJSONResponse) {
             emotionWords = motivated;
             break;
         case 'Happy':
+            emotionWords = happy;
+    }
+
+    // Iterate through object and store the playlists that match the given emotion
+    for (const playlist of playlists) {
+        if (emotionWords.some(v => playlist.description.toLowerCase().includes(v))) {
+            // Push Playlist object to array
+            emotionPlaylists.push(playlist)
+        }
+    }
+
+    return emotionPlaylists;
+}
+
+module.exports.getPlaylistsFromFaceEmotion = function(emotion, spotifyJSONResponse) {
+
+    let playlists = [];
+    if (spotifyJSONResponse) {
+        playlists = spotifyJSONResponse.playlists.items;
+    }
+    
+    let emotionPlaylists = [];
+
+    // Intialized here since let is block scoped
+    let emotionWords = [];
+
+    switch (emotion) {
+        case 'sadness':
+            emotionWords = sad;
+            break;
+        case 'anger':
+            emotionWords = angry;
+            break;
+        case 'neutral':
+            emotionWords = relaxed;
+            break;
+        case 'Motivated':
+            emotionWords = motivated;
+            break;
+        case 'happiness':
             emotionWords = happy;
     }
 
