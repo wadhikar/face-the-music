@@ -1,21 +1,9 @@
 const express = require('express');
 const { FaceClient, FaceModels } = require("@azure/cognitiveservices-face");
 const { CognitiveServicesCredentials } = require("@azure/ms-rest-azure-js");
-const cloudinary = require('cloudinary').v2;
 const dotenv = require('dotenv');
 
 dotenv.config();
-
-
-module.exports.createImageURL = function (imageBase64URI) {
-    let cloudifyResponse = null;
-    
-    cloudinary.uploader.upload(imageBase64URI, function(error, result) {
-        if (error) { console.warn(error); }
-        cloudifyResponse = result;
-    })
-    return cloudifyResponse.secure_url;
-};
 
 const faceKey = process.env.FACE_KEY;
 const faceEndPoint = process.env.FACE_END_POINT;
