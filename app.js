@@ -7,12 +7,14 @@ const queryString = require('querystring');
 const dotenv = require('dotenv');
 const SpotifyWebApi = require('spotify-web-api-node');
 const multer = require('multer');
+const bodyParser = require('body-parser');
+const cors = require('cors');
 
 const { FaceClient, FaceModels } = require("@azure/cognitiveservices-face");
 const { CognitiveServicesCredentials } = require("@azure/ms-rest-azure-js");
 
 const spotifyAPIConfig = require('./helpers/spotify-api');
-const ignoreFavicon = require('./middlewares/ignore-favicon');
+// const ignoreFavicon = require('./middlewares/ignore-favicon');
 const spotifyTrim = require('./helpers/spotify-trim')
 
 const indexRouter = require('./routes/index');
@@ -27,13 +29,17 @@ const app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-app.use(ignoreFavicon);
+// app.use(ignoreFavicon);
 
 app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+// app.use(express.json());
+// app.use(express.urlencoded({ extended: true }));
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '../frontend/ftm-react/build')));
 
 app.use('/', indexRouter);
 
