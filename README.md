@@ -29,12 +29,14 @@ Currently finding suitable playlists with predefined keywords.
   
 ## Configuration
 
-Create a .env file in the project root directory for the Spotify API credentials for testing on your local. They can be created/retrieved from the [Spotify Developer Dashboard](https://developer.spotify.com/dashboard/). 
+Create a .env file in the project root directory for the Spotify API and Azure Face API credentials for testing on your local. They can be created/retrieved from the [Spotify Developer Dashboard](https://developer.spotify.com/dashboard/) and from [Azure's Console](https://portal.azure.com/). 
 
 The format that this app looks for is:
   ```
-  CLIENT_ID=<Your client id>
-  CLIENT_SECRET=<Your client secret>
+  SPOTIFY_CLIENT_ID=<Your Spotify client id>
+  SPOTIFY_CLIENT_SECRET=<Your Spotify client secret>
+  FACE_KEY=<Your Azure Face API Key>
+  FACE_END_POINT=<Your Azure Face API endpoint>
   ```
   
 ## Usage
