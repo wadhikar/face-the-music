@@ -16,7 +16,6 @@ Currently finding suitable playlists with predefined keywords.
 * ~~Implement Azure Face API where user can submit selfie to scan current emotions as the input~~
 * ~~Use Spotify Embedded Widgets if user does not want to leave app~~
 * Offer a text emotion search to search for moods outside of those offered by Face API (eg: romantic, sleepy, curious(new releases), etc)
-* Create a Mobile App UI using React Native
 * Browse various Spotify Categories, not just the Mood Category
 * Add support for Apple Music
 * List results of playlist for inputted mood to allow user to make a selection vs the current randomization
