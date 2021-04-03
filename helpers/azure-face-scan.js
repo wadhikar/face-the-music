@@ -16,13 +16,10 @@ module.exports.faceDetectFromStreamOptionalParams = {
 module.exports.faceClient = new FaceClient(cognitiveServiceCredentials, faceEndPoint);
 
 module.exports.getHighestEmotion = function (emotionObject) {
-    console.log("The emotions are: ");
-    console.log(emotionObject);
 
     let highestEmotionValue = -1;
     let highestEmotion = '';
     for (const emotion in emotionObject) {
-        console.log("Looking at: ", emotion, emotionObject[emotion])
         if (emotionObject[emotion] > highestEmotionValue) {
             highestEmotion = emotion;
             highestEmotionValue = emotionObject[emotion];
