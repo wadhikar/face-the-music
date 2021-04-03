@@ -36,7 +36,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(cookieParser());
 
-// app.use(express.static(path.join(__dirname, '../frontend/ftm-react/build')));
+app.use(express.static(path.join(__dirname, './frontend/build')));
 
 app.use('/', indexRouter);
 app.use('/api', apiRouter);
