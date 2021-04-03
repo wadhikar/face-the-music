@@ -50,7 +50,7 @@ FACE_END_POINT=<Your Azure Face API endpoint>
 
 ```bash
 $ yarn start
-Server running at http://localhost:3000
+Server running at http://localhost:3001
 ```
 
 ## Licensing
