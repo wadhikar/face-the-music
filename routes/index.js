@@ -7,9 +7,8 @@ const cors = require('cors');
 const spotifyAPI = require('../helpers/spotify-api');
 const spotifyTrim = require('../helpers/spotify-trim');
 const {
-  createImageURL, faceClient, faceDetectFromStreamOptionalParams, getHighestEmotion
+  faceClient, faceDetectFromStreamOptionalParams, getHighestEmotion
 } = require('../helpers/azure-face-scan');
-const { play } = require('../helpers/spotify-api');
 
 const router = express.Router();
 
@@ -23,16 +22,10 @@ router.get('/', function(req, res, next) {
   // Upon loading homepage, get and set access token for all future requests
   spotifyAPI.clientCredentialsGrant().then(
     function(data) {
-      console.log("Received token!");
-      
       // Set access token for use in future calls
       spotifyAPI.setAccessToken(data.body['access_token']);
     },
     function(err) {
-      console.log(
-        'Something went wrong when retrieving an access token',
-        err.message
-      )
       next(err);
     }
   )
@@ -51,12 +44,10 @@ router.post('/playlist', function(req, res, next) {
     offset : 0
   })
   .then(function(data) {
-    console.log("Received results!");
     let emotionPlaylists = spotifyTrim.getPlaylistsFromUserEmotion(emotion, data.body)
     results.push(emotionPlaylists);
     
   }, function(err) {
-    console.log("Something went wrong!", err);
     next(err);
   })
   .then(
@@ -66,7 +57,6 @@ router.post('/playlist', function(req, res, next) {
       offset : 50
     })
     .then(function(data) {
-      console.log("Received results!");
       let emotionPlaylists = spotifyTrim.getPlaylistsFromUserEmotion(emotion, data.body)
       results.push(emotionPlaylists);
 
@@ -77,15 +67,11 @@ router.post('/playlist', function(req, res, next) {
       let spotifyExternalURL = spotifyTrim.buildOpenSpotifyURL(playlistId);
       let spotifyURI = 'spotify:playlist:' + playlistId;
       
-      // (async () => {
-      //   await open(spotifyExternalURL);
-      // })(); 
       (async () => {
         await open(spotifyURI);
       })();
       
     }, function(err) {
-      console.log("Something went wrong!", err);
       next(err);
     })
   );
@@ -104,37 +90,27 @@ router.post('/upload', upload.single('selfie'), function(req, res, next) {
   let emotion = '';
   let results = [];
 
-  console.log("Image Buffer: ", image);
-
   (async () => {
     await faceClient.face
       .detectWithStream(image, faceDetectFromStreamOptionalParams)
       .then(result => {
-        console.log("The result is: ");
-        console.log(result);
-        console.log("The emotions are: ");
-        console.log(result[0].faceAttributes.emotion);
         emotion = getHighestEmotion(result[0].faceAttributes.emotion);
-        console.log("The strongest emotion is: ", emotion);
         next();
       });
     
     // Currently stops here, probably because tries to execute but emotion value isn't set in promise
     // Might also have issues with multiple requests happening since SpotifyAPI probably does so under the hood
-    console.log("Getting playlist after Face API: ", emotion);
-    
+
     await spotifyAPI.getPlaylistsForCategory('mood', {
       country: 'CA',
       limit : 50,
       offset : 0
     })
     .then(function(data) {
-      console.log("Received results!");
       let emotionPlaylists = spotifyTrim.getPlaylistsFromFaceEmotion(emotion, data.body)
       results.push(emotionPlaylists);
       
     }, function(err) {
-      console.log("Something went wrong!", err);
       next(err);
     })
     .then(
@@ -144,7 +120,6 @@ router.post('/upload', upload.single('selfie'), function(req, res, next) {
         offset : 50
       })
       .then(function(data) {
-        console.log("Received results!");
         let emotionPlaylists = spotifyTrim.getPlaylistsFromFaceEmotion(emotion, data.body)
         results.push(emotionPlaylists);
 
@@ -159,7 +134,6 @@ router.post('/upload', upload.single('selfie'), function(req, res, next) {
         })();
         
       }, function(err) {
-        console.log("Something went wrong!", err);
         next(err);
       })
     )
@@ -169,106 +143,5 @@ router.post('/upload', upload.single('selfie'), function(req, res, next) {
   res.redirect('/')
 
 });
-
-/* 
-Endpoint for React App
-Receive image data in request.
-Get playlist and return URI and external URL
-*/
-// const apiUpload = upload.fields([
-//   { name: 'image' }, 
-//   { name: 'title' }
-// ]);
-const apiUpload = upload.single('userImage');
-
-router.post('/api/upload', cors(), apiUpload, asyncHandler(async(req, res, next) => {
-  
-  console.log("Received request from React");
-
-  // Can pass buffer to Face API
-  const image = req.file.buffer;
-  let emotion = '';
-  let results = [];
-  let playlistId = '';
-
-  console.log("Image Buffer: ", image);
-
-  await faceClient.face
-    .detectWithStream(image, faceDetectFromStreamOptionalParams)
-    .then(result => {
-      console.log("The result is: ");
-      console.log(result);
-      console.log("The emotions are: ");
-      console.log(result[0].faceAttributes.emotion);
-      emotion = getHighestEmotion(result[0].faceAttributes.emotion);
-      console.log("The strongest emotion is: ", emotion);
-      // next(); // Clean up
-    });
-  
-  console.log("Getting playlist after Face API: ", emotion);
-
-  await spotifyAPI.clientCredentialsGrant().then(
-    function(data) {
-      console.log("Received token!");
-      
-      // Set access token for use in future calls
-      spotifyAPI.setAccessToken(data.body['access_token']);
-    },
-    function(err) {
-      console.log(
-        'Something went wrong when retrieving an access token',
-        err.message
-      )
-      next(err);
-    }
-  )
-  
-  console.log("res._headers >>>>>>>" + JSON.stringify(res._headers));
-
-  await spotifyAPI.getPlaylistsForCategory('mood', {
-    country: 'CA',
-    limit : 50,
-    offset : 0
-  })
-  .then(function(data) {
-    console.log("Received results!");
-    let emotionPlaylists = spotifyTrim.getPlaylistsFromFaceEmotion(emotion, data.body)
-    results.push(emotionPlaylists);
-    
-  }, function(err) {
-    console.log("Something went wrong!", err);
-    next(err);
-  });
-
-  console.log("res._headers >>>>>>>" + JSON.stringify(res._headers));
-
-  await spotifyAPI.getPlaylistsForCategory('mood', {
-    country: 'CA',
-    limit : 50,
-    offset : 50
-  })
-  .then(function(data) {
-    console.log("Received results!");
-    let emotionPlaylists = spotifyTrim.getPlaylistsFromFaceEmotion(emotion, data.body)
-    results.push(emotionPlaylists);
-
-    // Ensure our array is flat
-    results = results.flat();
-
-    playlistId = spotifyTrim.getRandomPlaylistId(results);
-
-  }, function(err) {
-    console.log("Something went wrong!", err);
-    next(err);
-  });
-
-  console.log("res._headers >>>>>>>" + JSON.stringify(res._headers));
-
-  res.json({
-    uri: 'spotify:playlist:' + playlistId,
-    embedded: 'https://open.spotify.com/embed/playlist/' + playlistId,
-  });
-
-}));
 
 module.exports = router;

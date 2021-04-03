@@ -14,34 +14,32 @@ const { FaceClient, FaceModels } = require("@azure/cognitiveservices-face");
 const { CognitiveServicesCredentials } = require("@azure/ms-rest-azure-js");
 
 const spotifyAPIConfig = require('./helpers/spotify-api');
-// const ignoreFavicon = require('./middlewares/ignore-favicon');
 const spotifyTrim = require('./helpers/spotify-trim')
 
 const indexRouter = require('./routes/index');
+const apiRouter = require('./routes/api');
+
+dotenv.config();
 
 const app = express();
 
-// multer options
-// const storage = multer.memoryStorage();
-// const upload = multer({ storage: storage });
+app.set('environment', process.env.NODE_ENV); 
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-// app.use(ignoreFavicon);
-
 app.use(logger('dev'));
-// app.use(express.json());
-// app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
-// app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, '../frontend/ftm-react/build')));
+
+// app.use(express.static(path.join(__dirname, '../frontend/ftm-react/build')));
 
 app.use('/', indexRouter);
+app.use('/api', apiRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
