@@ -6,19 +6,19 @@ A Node/Express app that uses emotion data to find the user a suitable playlist f
 
 I decided to embark on a project that I felt that I could continue working on in the future. It uses new technologies that are becoming more popular in facial recognition, as seen extensively in apps like Snapchat.
 
-## Features
-
-Browse Spotify for a suitable playlist when inputting a mood. It will randomly select a suitable playlist and open it in the system browser, allowing the user to log into Spotify if they so wish.
-
-Currently finding suitable playlists with predefined keywords.
-
 ## Live Demo
 
 Want to try out the app?
 
 [Check it out.](https://face-the-music.herokuapp.com/ "Deployed on Heroku") 👈
 
-#### Future Features
+## Features
+
+Browse Spotify for a suitable playlist when inputting a mood. It will randomly select a suitable playlist and open it in the system browser, allowing the user to log into Spotify if they so wish.
+
+Currently finding suitable playlists with predefined keywords.
+
+### Future Features
 
 - ~~Implement Azure Face API where user can submit selfie to scan current emotions as the input~~
 - ~~Use Spotify Embedded Widgets if user does not want to leave app~~
@@ -30,7 +30,7 @@ Want to try out the app?
 ## Installation
 
 ```bash
-$ yarn install
+yarn install
 ```
 
 ## Configuration
@@ -39,7 +39,7 @@ Create a .env file in the project root directory for the Spotify API and Azure F
 
 The format that this app looks for is:
 
-```
+```bash
 SPOTIFY_CLIENT_ID=<Your Spotify client id>
 SPOTIFY_CLIENT_SECRET=<Your Spotify client secret>
 FACE_KEY=<Your Azure Face API Key>
