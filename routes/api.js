@@ -36,8 +36,24 @@ router.post('/upload', cors(), apiUpload, asyncHandler(async(req, res, next) => 
   await faceClient.face
     .detectWithStream(image, faceDetectFromStreamOptionalParams)
     .then(result => {
+      // If result is empty, aka no faces detected, then return 400
+      console.log(result);
+      if (result.length === 0) {
+        // res.status(400).send( "Couldn't detect a singular face! Make sure your face is alone and visible." );
+        // return;
+        const err = {
+          message: "Couldn't detect a singular face! Make sure your face is alone and visible.",
+          status: 400
+        };
+        return next(err);
+      }
       emotion = getHighestEmotion(result[0].faceAttributes.emotion);
     });
+
+  // If Face API didn't return a valid response, we need to stop execution
+  if (emotion === '') {
+    return;
+  }
 
   await spotifyAPI.clientCredentialsGrant().then(
     function(data) {      
